@@ -21,7 +21,7 @@ function getAll() {
 
 function remove(id) {
   return db('characters')
-    .where({ id })
+    .where('id', Number(id))
     .del()
 }
 

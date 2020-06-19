@@ -60,63 +60,33 @@ describe("server.js", () => {
     describe('insert()', () => {
       it('should insert provided characters into db', async () => {
 
-        await Characters.insert({ name: 'Steve', gender: 'male', age: 30, level: 1 })
+        await Characters.insert([{ name: 'Steve', gender: 'male', age: 30, level: 1 },{name: 'bob', gender: 'male', age: 30, level: 1 }])
 
         const character = await db('characters');
 
-        expect(character).toHaveLength(1)
-      })
-    })
+        expect(character).toHaveLength(2)
 
-    describe('POST /characters', () => {
-      it('should have the character', () => {
-        const person = { name: 'bob', gender: 'female', age: 31, level: 2 }
-
-        return supertest(server)
-          .post('/characters')
-          .send(person)
-          .then(res => {
-            console.log(res.body.name)
-            expect(res.body).toBe(person)
-          })
+        expect(character).toEqual([{id: 1, name: 'Steve', gender: 'male', age: 30, level: 1 },{id: 2, name: 'bob', gender: 'male', age: 30, level: 1 }])
       })
     })
 
   })    
         
-    //   const person = { name: 'Steve', gender: 'male', age: 30, level: 1 };
+  describe('DELETE /character/:id', () => {
+    describe('remove()', () => {
+      it('should delete a character', async () => {
+        await Characters.remove()
+        
+        const character = await db('characters')
 
-    //     await supertest(server)
-    //         .post("/characters")
-    //         .send(person)
-               
-    //   let allCharacters = await supertest(server).get('/characters')
+        expect(character).toHaveLength(0)
 
-    //   expect(allCharacters.body).toHaveLength(4);
-
-    //   await supertest(server).post('/characters').send({ name: 'bob', gender: 'male', age: 30, level: 1 })
-
-    //   allCharacters = await supertest(server).get('/characters')
-    //   expect(allCharacters.body).toHaveLength(4)
-              
-    // });
-    //});
+        expect(character).toEqual([])
+        })
+      })
+    })
   
   
 
-    // describe("POST /hobbits", () => {
-    //     it("should add multiple hobbits", async () => {
-    //         const hobbits = [{ name: "gaffer" }, { name: "frodo" }];
-
-    //         await supertest(server).post("/hobbits").send(hobbits);
-
-    //         let allhobits = await supertest(server).get("/hobbits");
-    //         expect(allhobits.body).toHaveLength(2);
-
-    //         await supertest(server).post("/hobbits").send({ name: "rose" });
-
-    //         allhobits = await supertest(server).get("/hobbits");
-    //         expect(allhobits.body).toHaveLength(3);
-    //     });
   })
 
